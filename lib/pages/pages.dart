@@ -1,4 +1,4 @@
-export 'calls.dart';
+export 'explore.dart';
 export 'messages_page.dart';
-export 'notifications.dart';
-export 'contact.dart';
+export 'connections_page.dart';
+export 'profile_page.dart';

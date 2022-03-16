@@ -31,10 +31,13 @@ class Avatar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return CircleAvatar(
-      radius: radius,
-      backgroundImage: CachedNetworkImageProvider(url),
-      backgroundColor: Theme.of(context).cardColor,
+    return Padding(
+      padding: const EdgeInsets.only(right: 8.0),
+      child: CircleAvatar(
+        radius: radius,
+        backgroundImage: CachedNetworkImageProvider(url),
+        backgroundColor: Theme.of(context).cardColor,
+      ),
     );
   }
 }

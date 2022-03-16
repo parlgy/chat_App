@@ -4,6 +4,7 @@ import 'package:frinded_chat/helpers.dart';
 import 'package:frinded_chat/pages/pages.dart';
 import 'package:frinded_chat/theme.dart';
 import 'package:frinded_chat/widgets/avatar.dart';
+import 'package:frinded_chat/widgets/widgets.dart';
 
 class HomeScreen extends StatelessWidget {
   final ValueNotifier<int> pageIndex = ValueNotifier(0);
@@ -13,16 +14,16 @@ class HomeScreen extends StatelessWidget {
 
   final pages = const [
     MessagePage(),
-    NotificationsPage(),
-    CallsPage(),
-    ContactPage(),
+    ConnectionsPage(),
+    ExplorePage(),
+    ProfilePage(),
   ];
 
   final pageTitles = const [
     'Messages',
-    'Notifications',
-    'Calls',
-    'Contacts',
+    'Connections',
+    'Explore',
+    'Profile',
   ];
 
   void _onNavigationItemSelected(index) {
@@ -37,6 +38,11 @@ class HomeScreen extends StatelessWidget {
         backgroundColor: Colors.transparent,
         elevation: 0.0,
         centerTitle: true,
+        leading: const Padding(
+          padding: EdgeInsets.all(10.0),
+          child: Search(),
+        ),
+        // leadingWidth: ,
         title: ValueListenableBuilder(
           valueListenable: title,
           builder: (BuildContext context, String value, _) {
@@ -107,21 +113,21 @@ class _BottomNavigationBarState extends State<_BottomNavigationBar> {
           ),
           NavigationBarItem(
             index: 1,
-            label: 'Notifications',
+            label: 'Connections',
             icon: CupertinoIcons.bell_solid,
             onTap: hundleItemSelected,
             isSelected: (selectedIndex == 1),
           ),
           NavigationBarItem(
             index: 2,
-            label: 'Calls',
-            icon: CupertinoIcons.phone_fill,
+            label: 'Explore',
+            icon: CupertinoIcons.search,
             onTap: hundleItemSelected,
             isSelected: (selectedIndex == 2),
           ),
           NavigationBarItem(
             index: 3,
-            label: 'Contacts',
+            label: 'Profile',
             icon: CupertinoIcons.person_2_fill,
             onTap: hundleItemSelected,
             isSelected: (selectedIndex == 3),
