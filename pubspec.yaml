@@ -45,7 +45,7 @@ dependencies:
   jiffy: ^5.0.0
 
 flutter_native_splash:
-  color: "#FFA500"
+#  color: "#FFA500"
   # image: "assets/images/happy.png"
   background_image: "assets/images/splash_back.png"
   android: true

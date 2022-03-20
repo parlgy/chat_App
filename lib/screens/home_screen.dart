@@ -4,6 +4,7 @@ import 'package:frinded_chat/helpers.dart';
 import 'package:frinded_chat/pages/pages.dart';
 import 'package:frinded_chat/theme.dart';
 import 'package:frinded_chat/widgets/avatar.dart';
+import 'package:frinded_chat/widgets/glowing_action_button.dart';
 import 'package:frinded_chat/widgets/widgets.dart';
 
 class HomeScreen extends StatelessWidget {
@@ -35,6 +36,7 @@ class HomeScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        iconTheme: Theme.of(context).iconTheme,
         backgroundColor: Colors.transparent,
         elevation: 0.0,
         centerTitle: true,
@@ -53,6 +55,7 @@ class HomeScreen extends StatelessWidget {
               value,
               style: const TextStyle(
                 fontWeight: FontWeight.bold,
+                color: Colors.orange,
                 fontSize: 16,
               ),
             );
@@ -101,41 +104,57 @@ class _BottomNavigationBarState extends State<_BottomNavigationBar> {
 
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-      top: false,
-      bottom: true,
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceAround,
-        children: [
-          NavigationBarItem(
-            index: 0,
-            label: 'Messages',
-            icon: CupertinoIcons.bubble_left_bubble_right_fill,
-            onTap: hundleItemSelected,
-            isSelected: (selectedIndex == 0),
+    final brightness = Theme.of(context).brightness;
+
+    return Card(
+      color: (brightness == Brightness.light) ? Colors.transparent : null,
+      margin: const EdgeInsets.all(0),
+      elevation: 0,
+      child: Padding(
+        padding: const EdgeInsets.only(top: 16.0, left: 8, right: 8, bottom: 10),
+        child: SafeArea(
+          top: false,
+          bottom: true,
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            children: [
+              NavigationBarItem(
+                index: 0,
+                label: 'Messages',
+                icon: CupertinoIcons.bubble_left_bubble_right_fill,
+                onTap: hundleItemSelected,
+                isSelected: (selectedIndex == 0),
+              ),
+              NavigationBarItem(
+                index: 1,
+                label: 'Connections',
+                icon: CupertinoIcons.bell_solid,
+                onTap: hundleItemSelected,
+                isSelected: (selectedIndex == 1),
+              ),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                child: GlowingActionButton(color: AppColors.secondary, icon: CupertinoIcons.add, onPressed: (){
+                //  TODO:
+                },),
+              ),
+              NavigationBarItem(
+                index: 2,
+                label: 'Explore',
+                icon: CupertinoIcons.search,
+                onTap: hundleItemSelected,
+                isSelected: (selectedIndex == 2),
+              ),
+              NavigationBarItem(
+                index: 3,
+                label: 'Profile',
+                icon: CupertinoIcons.person_2_fill,
+                onTap: hundleItemSelected,
+                isSelected: (selectedIndex == 3),
+              ),
+            ],
           ),
-          NavigationBarItem(
-            index: 1,
-            label: 'Connections',
-            icon: CupertinoIcons.bell_solid,
-            onTap: hundleItemSelected,
-            isSelected: (selectedIndex == 1),
-          ),
-          NavigationBarItem(
-            index: 2,
-            label: 'Explore',
-            icon: CupertinoIcons.search,
-            onTap: hundleItemSelected,
-            isSelected: (selectedIndex == 2),
-          ),
-          NavigationBarItem(
-            index: 3,
-            label: 'Profile',
-            icon: CupertinoIcons.person_2_fill,
-            onTap: hundleItemSelected,
-            isSelected: (selectedIndex == 3),
-          ),
-        ],
+        ),
       ),
     );
   }
@@ -165,7 +184,7 @@ class NavigationBarItem extends StatelessWidget {
         onTap(index);
       },
       child: SizedBox(
-        height: 70,
+        width: 80,
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
