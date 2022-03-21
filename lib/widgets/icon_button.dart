@@ -13,12 +13,15 @@ class Search extends StatelessWidget {
     return Material(
       color: Theme.of(context).cardColor,
       borderRadius: BorderRadius.circular(6),
-      child: InkWell(
-        splashColor: AppColors.secondary,
-        onTap: onTap,
-        child: Icon(
-          icon,
-          size: 18,
+      child: Padding(
+        padding: const EdgeInsets.all(6.0),
+        child: InkWell(
+          splashColor: AppColors.secondary,
+          onTap: onTap,
+          child: Icon(
+            icon,
+            size: 18,
+          ),
         ),
       ),
     );

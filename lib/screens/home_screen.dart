@@ -1,11 +1,11 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:frinded_chat/helpers.dart';
 import 'package:frinded_chat/pages/pages.dart';
+import 'package:frinded_chat/screens/profile_screen.dart';
 import 'package:frinded_chat/theme.dart';
-import 'package:frinded_chat/widgets/avatar.dart';
 import 'package:frinded_chat/widgets/glowing_action_button.dart';
 import 'package:frinded_chat/widgets/widgets.dart';
+import 'package:frinded_chat/app.dart';
 
 class HomeScreen extends StatelessWidget {
   final ValueNotifier<int> pageIndex = ValueNotifier(0);
@@ -17,7 +17,7 @@ class HomeScreen extends StatelessWidget {
     MessagePage(),
     ConnectionsPage(),
     ExplorePage(),
-    ProfilePage(),
+    ContactsPage(),
   ];
 
   final pageTitles = const [
@@ -65,8 +65,17 @@ class HomeScreen extends StatelessWidget {
           },
         ),
         actions: [
-          Avatar.small(
-            url: Helpers.randomPictureUrl(),
+          Padding(
+            padding: const EdgeInsets.only(right: 24.0),
+            child: Hero(
+              tag: 'hero-profile-picture',
+              child: Avatar.small(
+                url: context.currentUserImage,
+                onTap: () {
+                  Navigator.of(context).push(ProfileScreen.route);
+                },
+              ),
+            ),
           ),
         ],
       ),
@@ -114,7 +123,8 @@ class _BottomNavigationBarState extends State<_BottomNavigationBar> {
       margin: const EdgeInsets.all(0),
       elevation: 0,
       child: Padding(
-        padding: const EdgeInsets.only(top: 16.0, left: 8, right: 8, bottom: 10),
+        padding:
+            const EdgeInsets.only(top: 16.0, left: 8, right: 8, bottom: 10),
         child: SafeArea(
           top: false,
           bottom: true,
@@ -137,9 +147,21 @@ class _BottomNavigationBarState extends State<_BottomNavigationBar> {
               ),
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                child: GlowingActionButton(color: AppColors.secondary, icon: CupertinoIcons.add, onPressed: (){
-                //  TODO:
-                },),
+                child: GlowingActionButton(
+                  color: AppColors.secondary,
+                  icon: CupertinoIcons.add,
+                  onPressed: () {
+                    showDialog(
+                      context: context,
+                      builder: (BuildContext context) => const Dialog(
+                        child: AspectRatio(
+                          aspectRatio: 8 / 7,
+                          child: ContactsPage(),
+                        ),
+                      ),
+                    );
+                  },
+                ),
               ),
               NavigationBarItem(
                 index: 2,
@@ -150,7 +172,7 @@ class _BottomNavigationBarState extends State<_BottomNavigationBar> {
               ),
               NavigationBarItem(
                 index: 3,
-                label: 'Profile',
+                label: 'Contacts',
                 icon: CupertinoIcons.person_2_fill,
                 onTap: hundleItemSelected,
                 isSelected: (selectedIndex == 3),

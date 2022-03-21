@@ -1,55 +1,74 @@
 import 'package:flutter/material.dart';
 
 @immutable
-class DemoUser{
+class DemoUser {
   final String id;
   final String name;
   final String image;
 
-  const DemoUser({required this.id, required this.name, required this.image,});
+  const DemoUser({
+    required this.id,
+    required this.name,
+    required this.image,
+  });
 }
 
 const users = [
   userDan,
-  userOlivine,
-  userBett,
-  userSonia,
   userJoh,
-  userAmiani,
+  userBett,
+  userElvis,
+  userOlivine,
+  userSonia,
+  userAdipo,
 ];
 
 const userDan = DemoUser(
-  id: "dan",
-  name: "Parlgy Dan",
+  id: 'dan',
+  name: 'Dante',
   image:
-  'https://images.unsplash.com/photo-1622847790720-57ca83a5bc27?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=685&q=80',);
-
-const userOlivine = DemoUser(
-  id: "olivine",
-  name: "Olivine George",
-  image:
-  'https://images.unsplash.com/photo-1552493450-2b5ce80ed13f?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1114&q=80',);
-
-const userBett = DemoUser(
-  id: "bett",
-  name: "Stephen Bett",
-  image:
-  'https://images.unsplash.com/photo-1504199367641-aba8151af406?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=687&q=80',);
-
-const userSonia = DemoUser(
-  id: "sonia",
-  name: "Miss Sonia",
-  image:
-  'https://images.unsplash.com/photo-1519011985187-444d62641929?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=764&q=80',);
+  'https://pbs.twimg.com/profile_images/1262058845192335360/Ys_-zu6W_400x400.jpg',
+);
 
 const userJoh = DemoUser(
-  id: "joh",
-  name: "Joel Koyoo",
+  id: 'joh',
+  name: 'Joel',
   image:
-  'https://images.unsplash.com/photo-1546456073-ea246a7bd25f?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=687&q=80',);
+  'https://pbs.twimg.com/profile_images/1252869649349238787/cKVPSIyG_400x400.jpg',
+);
 
-const userAmiani = DemoUser(
-  id: "amiani",
-  name: "Elvis Amiani",
+const userBett = DemoUser(
+  id: 'bett',
+  name: 'Bett',
   image:
-  'https://images.unsplash.com/photo-1507038732509-8b1a9623223a?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=687&q=80',);
+  'https://pbs.twimg.com/profile_images/1199684106193375232/IxA9XLuN_400x400.jpg',
+);
+
+const userElvis = DemoUser(
+  id: 'elvis',
+  name: 'Elvis',
+  image:
+  'https://pbs.twimg.com/profile_images/1371411357459832832/vIy8TO9F_400x400.jpg',
+);
+
+const userOlivine = DemoUser(
+  id: 'olivine',
+  name: 'Olivine',
+  image:
+  'https://pbs.twimg.com/profile_images/1324766105127153664/q96TpY8I_400x400.jpg',
+);
+
+const userSonia = DemoUser(
+  id: 'sonia',
+  name: 'Sonia',
+  image:
+  'https://pbs.twimg.com/profile_images/1370571324578480130/UxBBI30i_400x400.jpg',
+);
+
+const userAdipo = DemoUser(
+  id: 'adipo',
+  name: 'Adipo',
+  image:
+  'https://pbs.twimg.com/profile_images/1436372495381172225/4wDDMuD8_400x400.jpg',
+);
+

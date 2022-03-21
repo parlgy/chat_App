@@ -5,37 +5,61 @@ import 'package:frinded_chat/screens/chat_screen.dart';
 import 'package:frinded_chat/theme.dart';
 import 'package:frinded_chat/widgets/avatar.dart';
 import 'package:faker/faker.dart';
+import 'package:frinded_chat/widgets/widgets.dart';
 import 'package:jiffy/jiffy.dart';
+import 'package:stream_chat_flutter_core/stream_chat_flutter_core.dart';
+import 'package:frinded_chat/app.dart';
 
-class MessagePage extends StatelessWidget {
+class MessagePage extends StatefulWidget {
   const MessagePage({Key? key}) : super(key: key);
 
   @override
-  Widget build(BuildContext context) {
-    return CustomScrollView(
-      slivers: [
-        const SliverToBoxAdapter(
-          child: _Stories(),
-        ),
-        SliverList(
-          delegate: SliverChildBuilderDelegate(_delegate),
-        ),
-      ],
-    );
-  }
+  State<MessagePage> createState() => _MessagePageState();
+}
 
-  Widget _delegate(BuildContext context, int index) {
-    final Faker faker = Faker();
-    final date = Helpers.randomDate();
-    return _MessageTiles(
-      messageData: MessageData(
-        senderName: faker.person.name(),
-        message: faker.lorem.sentence(),
-        messageDate: date,
-        dateMessage: Jiffy(date).fromNow(),
-        profilePicture: Helpers.randomPictureUrl(),
-      ),
-    );
+class _MessagePageState extends State<MessagePage> {
+  final channelListController =
+      ChannelListController(); //allows reloading and pagination
+  @override
+  Widget build(BuildContext context) {
+    return ChannelListCore(
+        channelListController: channelListController,
+        filter: Filter.and(
+          [
+            Filter.equal('type', 'messaging'),
+            Filter.in_('members', [
+              StreamChatCore.of(context).currentUser!.id,
+            ])
+          ],
+        ),
+        emptyBuilder: (context) => const Center(
+              child: Text('So empty. \nGo and message someone'),
+            ),
+        errorBuilder: (context, error) => DisplayErrorMessage(
+              error: error,
+            ),
+        loadingBuilder: (context) => const Center(
+                child: SizedBox(
+              height: 100,
+              width: 100,
+              child: CircularProgressIndicator(),
+            )),
+        listBuilder: (context, channels) {
+          return CustomScrollView(
+            slivers: [
+              const SliverToBoxAdapter(
+                child: _Stories(),
+              ),
+              SliverList(
+                delegate: SliverChildBuilderDelegate((context, index) {
+                  return _MessageTiles(
+                    channel: channels[index],
+                  );
+                }, childCount: channels.length),
+              ),
+            ],
+          );
+        });
   }
 }
 
@@ -47,7 +71,7 @@ class _Stories extends StatelessWidget {
     return Card(
       elevation: 0.0,
       child: SizedBox(
-        height: 134,
+        height: 164,
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -123,14 +147,17 @@ class _StoryCard extends StatelessWidget {
 
 // Message Tiles Section
 class _MessageTiles extends StatelessWidget {
-  final MessageData messageData;
-  const _MessageTiles({Key? key, required this.messageData}) : super(key: key);
+  final Channel channel;
+
+  const _MessageTiles({Key? key, required this.channel}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return InkWell(
-      onTap: (){
-        Navigator.of(context).push(ChatScreen.route(messageData),);
+      onTap: () {
+        Navigator.of(context).push(
+          ChatScreen.routeWithChannel(channel),
+        );
       },
       child: Container(
         height: 100,
@@ -150,7 +177,7 @@ class _MessageTiles extends StatelessWidget {
               Padding(
                 padding: const EdgeInsets.all(10.0),
                 child: Avatar.medium(
-                  url: messageData.profilePicture,
+                  url: Helpers.getChannelImage(channel, context.currentUser!),
                 ),
               ),
               Expanded(
@@ -161,7 +188,7 @@ class _MessageTiles extends StatelessWidget {
                     Padding(
                       padding: const EdgeInsets.symmetric(vertical: 8.0),
                       child: Text(
-                        messageData.senderName,
+                        Helpers.getChannelName(channel, context.currentUser!),
                         overflow: TextOverflow.ellipsis,
                         style: const TextStyle(
                           letterSpacing: 0.2,
@@ -172,12 +199,7 @@ class _MessageTiles extends StatelessWidget {
                     ),
                     SizedBox(
                       height: 20,
-                      child: Text(messageData.message,
-                          overflow: TextOverflow.ellipsis,
-                          style: const TextStyle(
-                            color: AppColors.textFaded,
-                            fontSize: 12,
-                          )),
+                      child: _buildLastMessage(),
                     ),
                   ],
                 ),
@@ -191,32 +213,13 @@ class _MessageTiles extends StatelessWidget {
                     const SizedBox(
                       height: 4,
                     ),
-                    Text(
-                      messageData.dateMessage.toUpperCase(),
-                      style: const TextStyle(
-                          fontSize: 11,
-                          letterSpacing: -0.2,
-                          fontWeight: FontWeight.w600,
-                          color: AppColors.textFaded),
-                    ),
+                    _buildLastMessageAt(),
                     const SizedBox(height: 8),
-                    Container(
-                      width: 18,
-                      height: 18,
-                      decoration: const BoxDecoration(
-                        color: AppColors.secondary,
-                        shape: BoxShape.circle,
+                    Center(
+                      child: UnreadIndicator(
+                        channel: channel,
                       ),
-                      child: const Center(
-                        child: Text(
-                          "1",
-                          style: TextStyle(
-                            fontSize: 10,
-                            color: AppColors.textLight,
-                          ),
-                        ),
-                      ),
-                    ),
+                    )
                   ],
                 ),
               ),
@@ -224,6 +227,71 @@ class _MessageTiles extends StatelessWidget {
           ),
         ),
       ),
+    );
+  }
+
+  Widget _buildLastMessage() {
+    return BetterStreamBuilder<int>(
+      stream: channel.state!.unreadCountStream,
+      initialData: channel.state?.unreadCount ?? 0,
+      builder: (context, count) {
+        return BetterStreamBuilder<Message>(
+          stream: channel.state!.lastMessageStream,
+          initialData: channel.state!.lastMessage,
+          builder: (context, lastMessage) {
+            return Text(
+              lastMessage.text ?? '',
+              overflow: TextOverflow.ellipsis,
+              style: (count > 0)
+                  ? const TextStyle(
+                fontSize: 12,
+                color: AppColors.secondary,
+              )
+                  : const TextStyle(
+                fontSize: 12,
+                color: AppColors.textFaded,
+              ),
+            );
+          },
+        );
+      },
+    );
+  }
+
+  Widget _buildLastMessageAt() {
+    return BetterStreamBuilder<DateTime>(
+      stream: channel.lastMessageAtStream,
+      initialData: channel.lastMessageAt,
+      builder: (context, data) {
+        final lastMessageAt = data.toLocal();
+        String stringDate;
+        final now = DateTime.now();
+
+        final startOfDay = DateTime(now.year, now.month, now.day);
+
+        if (lastMessageAt.millisecondsSinceEpoch >=
+            startOfDay.millisecondsSinceEpoch) {
+          stringDate = Jiffy(lastMessageAt.toLocal()).jm;
+        } else if (lastMessageAt.millisecondsSinceEpoch >=
+            startOfDay
+                .subtract(const Duration(days: 1))
+                .millisecondsSinceEpoch) {
+          stringDate = 'YESTERDAY';
+        } else if (startOfDay.difference(lastMessageAt).inDays < 7) {
+          stringDate = Jiffy(lastMessageAt.toLocal()).EEEE;
+        } else {
+          stringDate = Jiffy(lastMessageAt.toLocal()).yMd;
+        }
+        return Text(
+          stringDate,
+          style: const TextStyle(
+            fontSize: 11,
+            letterSpacing: -0.2,
+            fontWeight: FontWeight.w600,
+            color: AppColors.textFaded,
+          ),
+        );
+      },
     );
   }
 }

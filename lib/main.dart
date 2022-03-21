@@ -31,10 +31,13 @@ class MyApp extends StatelessWidget {
       theme: AppTheme.light(),
       darkTheme: AppTheme.dark(),
       themeMode: ThemeMode.dark,
-      builder: (context, child){
+      builder: (context, child) {
         return StreamChatCore(
-            client: client,
-            child: child!);
+          client: client,
+          child: UsersBloc(
+            child: ChannelsBloc(child: child!),
+          ),
+        );
       },
       home: const SelectUserScreen(),
     );
