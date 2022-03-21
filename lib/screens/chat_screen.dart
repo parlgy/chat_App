@@ -11,7 +11,9 @@ class ChatScreen extends StatelessWidget {
   const ChatScreen({
     Key? key,
     required this.messageData,
-  }) : super(key: key);
+  }) : super(key: key
+
+  );
 
   static Route route(MessageData data) => MaterialPageRoute(
         builder: (context) => ChatScreen(

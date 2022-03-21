@@ -41,11 +41,14 @@ class HomeScreen extends StatelessWidget {
         elevation: 0.0,
         centerTitle: true,
         leading: Center(
-          child: Search(
-              icon: Icons.search,
-              onTap: () {
-                // TODO:
-              }),
+          child: Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Search(
+                icon: Icons.search,
+                onTap: () {
+                  // TODO:
+                }),
+          ),
         ),
         // leadingWidth: ,
         title: ValueListenableBuilder(

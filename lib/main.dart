@@ -1,13 +1,26 @@
 import 'package:flutter/material.dart';
+import 'package:frinded_chat/app.dart';
 import 'package:frinded_chat/screens/screens.dart';
 import 'package:frinded_chat/theme.dart';
+import 'package:stream_chat_flutter_core/stream_chat_flutter_core.dart';
 
 void main() {
-  runApp(const MyApp());
+  final client = StreamChatClient(streamKey);
+
+  runApp(
+    MyApp(
+      client: client,
+    ),
+  );
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({Key? key}) : super(key: key);
+  final StreamChatClient client;
+
+  const MyApp({
+    Key? key,
+    required this.client,
+  }) : super(key: key);
 
   // This widget is the root of your application.
   @override
@@ -18,7 +31,12 @@ class MyApp extends StatelessWidget {
       theme: AppTheme.light(),
       darkTheme: AppTheme.dark(),
       themeMode: ThemeMode.dark,
-      home: HomeScreen(),
+      builder: (context, child){
+        return StreamChatCore(
+            client: client,
+            child: child!);
+      },
+      home: const SelectUserScreen(),
     );
   }
 }
