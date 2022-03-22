@@ -61,20 +61,6 @@ class _ChatScreenState extends State<ChatScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        iconTheme: Theme.of(context).iconTheme,
-        backgroundColor: Colors.transparent,
-        elevation: 0.0,
-        centerTitle: false,
-        leadingWidth: 54,
-        leading: Align(
-            alignment: Alignment.centerRight,
-            child: Search(
-              icon: CupertinoIcons.back,
-              onTap: () {
-                Navigator.of(context).pop();
-              },
-            )),
-        // leadingWidth: ,
         title: const _AppBarTitle(),
         actions: [
           Padding(
@@ -206,7 +192,7 @@ class _MessageTile extends StatelessWidget {
                     const EdgeInsets.symmetric(horizontal: 12, vertical: 20),
                 child: Text(
                   message.text ?? '',
-                  style: const TextStyle(color: AppColors.textLight),
+                  style: const TextStyle(color: AppColors.textLigth),
                 ),
               ),
             ),
@@ -260,7 +246,7 @@ class _MessageOwnTile extends StatelessWidget {
                     const EdgeInsets.symmetric(horizontal: 12, vertical: 20),
                 child: Text(
                   message.text ?? '',
-                  style: const TextStyle(color: AppColors.textLight),
+                  style: const TextStyle(color: AppColors.textLigth),
                 ),
               ),
             ),

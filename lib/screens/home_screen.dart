@@ -36,21 +36,6 @@ class HomeScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        iconTheme: Theme.of(context).iconTheme,
-        backgroundColor: Colors.transparent,
-        elevation: 0.0,
-        centerTitle: true,
-        leading: Center(
-          child: Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Search(
-                icon: Icons.search,
-                onTap: () {
-                  // TODO:
-                }),
-          ),
-        ),
-        // leadingWidth: ,
         title: ValueListenableBuilder(
           valueListenable: title,
           builder: (BuildContext context, String value, _) {
@@ -138,13 +123,13 @@ class _BottomNavigationBarState extends State<_BottomNavigationBar> {
                 onTap: hundleItemSelected,
                 isSelected: (selectedIndex == 0),
               ),
-              NavigationBarItem(
-                index: 1,
-                label: 'Connections',
-                icon: CupertinoIcons.bell_solid,
-                onTap: hundleItemSelected,
-                isSelected: (selectedIndex == 1),
-              ),
+              // NavigationBarItem(
+              //   index: 1,
+              //   label: 'Connections',
+              //   icon: CupertinoIcons.bell_solid,
+              //   onTap: hundleItemSelected,
+              //   isSelected: (selectedIndex == 1),
+              // ),
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 8.0),
                 child: GlowingActionButton(
@@ -163,13 +148,13 @@ class _BottomNavigationBarState extends State<_BottomNavigationBar> {
                   },
                 ),
               ),
-              NavigationBarItem(
-                index: 2,
-                label: 'Explore',
-                icon: CupertinoIcons.search,
-                onTap: hundleItemSelected,
-                isSelected: (selectedIndex == 2),
-              ),
+              // NavigationBarItem(
+              //   index: 2,
+              //   label: 'Explore',
+              //   icon: CupertinoIcons.search,
+              //   onTap: hundleItemSelected,
+              //   isSelected: (selectedIndex == 2),
+              // ),
               NavigationBarItem(
                 index: 3,
                 label: 'Contacts',
@@ -184,6 +169,7 @@ class _BottomNavigationBarState extends State<_BottomNavigationBar> {
     );
   }
 }
+
 
 class NavigationBarItem extends StatelessWidget {
   final String label;
